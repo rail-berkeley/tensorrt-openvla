@@ -5,10 +5,7 @@ from transformers.dynamic_module_utils import get_class_from_dynamic_module
 import os
 import argparse
 
-parser = argparse.ArgumentParser(
-                    prog='ProgramName',
-                    description='What the program does',
-                    epilog='Text at the bottom of help')
+parser = argparse.ArgumentParser()
 
 parser.add_argument('--save-dir', default="./save_dir", type=str)
 parser.add_argument('--test-load', action='store_true')

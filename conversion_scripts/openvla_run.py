@@ -30,9 +30,11 @@ from tensorrt_llm.runtime import ModelRunner, Session, TensorInfo, StoppingCrite
 
 import copy
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import requests
 import argparse
+import textwrap
+import enum
 
 parser = argparse.ArgumentParser()
 
@@ -40,8 +42,6 @@ parser.add_argument('--save-dir', default="./save_dir", type=str)
 parser.add_argument('--ckpts-dir', default="./ckpts", type=str)
 
 args = parser.parse_args()
-
-
 
 device = "cuda"
 engine_dir = os.path.join(args.ckpts_dir, "openvla_engine")
@@ -150,7 +150,6 @@ with torch.no_grad():
         max_new_tokens=400,
         end_id=end_id,
         pad_id=pad_id,
-        stop_words_list=[[[1, 2,]],],
         early_stopping=1,
         do_sample=False,
         random_seed=0,
@@ -164,7 +163,6 @@ with torch.no_grad():
 print(f"Done! Time elapsed: {time.time() - start}.")
 
 output_ids = outputs['output_ids']
-output_text = tokenizer.decode(output_ids.reshape(-1))
+output_text = tokenizer.decode(output_ids.reshape(-1), skip_special_tokens=True)
 
 print(output_text)
-print(output_ids)

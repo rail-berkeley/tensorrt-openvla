@@ -54,9 +54,9 @@ First, save the LLM backbone, tokenizer, vision backbone, and projector from an 
 cd <PATH TO THIS REPO>/tensorrt-openvla
 
 # Save OpenVLA modules to specified directory
-python ./conversion_scripts/save_backbone.py --save-dir <PATH TO SAVE DIR>
+python ./scripts/save_backbone.py --save-dir <PATH TO SAVE DIR>
 # Attempts to load VLA modules separately from specified directory, after being saved with above
-python ./conversion_scripts/save_backbone.py --save-dir <PATH TO SAVE DIR> --test-load
+python ./scripts/save_backbone.py --save-dir <PATH TO SAVE DIR> --test-load
 ```
 This saves the Llama 2 backbone from the OpenVLA policy to `<PATH TO SAVE DIR>/LLM_backbone` in the Huggingface format, meaning it can now be converted to the TRT-LLM checkpoint format. If using Docker, we suggest setting `<PATH TO SAVE DIR>` to be within this repo, if you modified the `Makefile` as described above to mount this repo within the container. The following will assume that `<PATH TO SAVE DIR>` is `tensorrt-openvla/save_dir` and that this repo is mounted to `/code/tensorrt-openvla`.
 
@@ -103,7 +103,8 @@ This compiles the model into a TRT-LLM engine, located at `/code/tensorrt-openvl
 
 Finally, to test this engine, run the following:
 ```bash
-python /code/tensorrt-openvla/conversion_scripts/openvla_run.py \
+python /code/tensorrt-openvla/scripts/openvla_run.py \
     --save-dir /code/tensorrt-openvla/save-dir --ckpts-dir /code/tensorrt-openvla/ckpts
 ```
 This should run the forward pass on the example image from the [ECoT Colab example](https://colab.research.google.com/drive/1CzRKin3T9dl-4HYBVtuULrIskpVNHoAH?usp=sharing), and the compiled model should output a similarly reasonable reasoning chain as in that notebook.
+

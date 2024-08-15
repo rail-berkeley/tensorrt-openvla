@@ -79,7 +79,7 @@ class TRTOpenVLA:
         batch_size = input_ids.shape[0]
         
         virt_tokens = torch.tensor([list(range(base_vocab_size, base_vocab_size + 256))] * batch_size, dtype=torch.int32)
-        batch_input_ids = torch.cat([input_ids[:, :1], virt_tokens, input_ids[:, 1:]], dim=1)
+        batch_input_ids = torch.cat([input_ids[:, :1], virt_tokens.to(input_ids.device), input_ids[:, 1:]], dim=1)
 
         # for i in range(len(batch_input_ids)):
         #     batch_input_ids[i] = batch_input_ids[i][:1] + \

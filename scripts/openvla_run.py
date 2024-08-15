@@ -49,7 +49,7 @@ device = "cuda"
 engine_dir = os.path.join(args.ckpts_dir, "openvla_engine")
 save_dir = args.save_dir
 
-processor = AutoProcessor.from_pretrained( "Embodied-CoT/ecot-openvla-7b-bridge", trust_remote_code=True)
+processor = AutoProcessor.from_pretrained("Embodied-CoT/ecot-openvla-7b-bridge", trust_remote_code=True)
 vla = TRTOpenVLA(save_dir, engine_dir, "Embodied-CoT/ecot-openvla-7b-bridge", device=device)
 
 print("Getting image...")

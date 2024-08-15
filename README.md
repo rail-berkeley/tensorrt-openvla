@@ -108,3 +108,22 @@ python /code/tensorrt-openvla/scripts/openvla_run.py \
 ```
 This should run the forward pass on the example image from the [ECoT Colab example](https://colab.research.google.com/drive/1CzRKin3T9dl-4HYBVtuULrIskpVNHoAH?usp=sharing), and the compiled model should output a similarly reasonable reasoning chain as in that notebook.
 
+## TRT-OpenVLA Deployment
+As the compiled OpenVLA policy is most easily run inside the Docker container, we provide code to run the model as an inference server (run inside the Docker), which an external client can query for actions.
+
+First, edit `TensorRT-LLM/docker/Makefile` and add `-p 8000:8000 \` to the arguments of the command on line 120 (e.g., after the `--volume` argument added during the Installation section above). This mounts port `8000` on the host machine to `8000` within the container as well. Then, enter the Docker and install some dependencies for running the server:
+```bash
+pip install timm==0.9.10 fastapi uvicorn json-numpy draccus
+```
+Finally, run the following within the Docker to start up the server:
+```bash
+cd /code/tensorrt-openvla
+python scripts/deploy_server.py --save-dir /code/tensorrt-openvla/save_dir/ --engine-dir /code/tensorrt-openvla/ckpts/openvla_engine/
+```
+This will start the server at `0.0.0.0:8000/act` by default. Use `--host` and `--port` to specify the host IP and port respectively.
+
+Now, outside the Docker, you can run:
+```bash
+python scripts/query_server.py
+```
+This will send a request to `0.0.0.0:8000/act` containing the image (as an `np.ndarray`) and instruction string. After running inference, it should return with a dictionary containing the action (as a 7 element `np.ndarray`) and the generated reasoning as a string. If the generated IDs are desired instead, change `return_ids` in the sent request to `True`.

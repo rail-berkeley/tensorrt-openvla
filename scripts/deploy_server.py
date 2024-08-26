@@ -31,13 +31,10 @@ class TRTOpenVLAServer:
 
     def predict_action(self, payload: Dict[str, Any]) -> str:
         try:
-            if double_encode := "encoded" in payload:
-                # Support cases where `json_numpy` is hard to install, and numpy arrays are "double-encoded" as strings
-                assert len(payload.keys()) == 1, "Only uses encoded payload!"
-                payload = json.loads(payload["encoded"])
+            # payload = json.loads(payload)
 
             # Parse payload components
-            image, instruction = payload["image"], payload["instruction"]
+            image, instruction = json_numpy.loads(payload["image"]), payload["instruction"]
             unnorm_key = payload.get("unnorm_key", None)
 
             # Run VLA Inference
@@ -48,13 +45,8 @@ class TRTOpenVLAServer:
                 generated = np.array(generated_ids.cpu())
             else:
                 generated = self.processor.decode(generated_ids, skip_special_tokens=True)
-
-            if double_encode:
-                # return JSONResponse(json_numpy.dumps(action))
-                return JSONResponse(json_numpy.dumps({"action": action, "generated": generated}))
-            else:
-                raise NotImplementedError
-                return JSONResponse(action)
+            return JSONResponse(json_numpy.dumps({"action": action, "generated": generated}))
+        
         except:  # noqa: E722
             logging.error(traceback.format_exc())
             logging.warning(

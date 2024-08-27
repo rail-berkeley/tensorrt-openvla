@@ -87,4 +87,5 @@ def main():
         ).load_state_dict(torch.load(os.path.join(save_dir, "projector.pth")))
         print("Successful!")
 
-
+if __name__ == "__main__":
+    main()

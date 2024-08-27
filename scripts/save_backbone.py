@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--save-dir', default="./save_dir", type=str)
 parser.add_argument('--test-load', action='store_true')
-parser.add_argument('--hf-openvla', 
+parser.add_argument('--hf-name', 
                     default="Embodied-CoT/ecot-openvla-7b-bridge", 
                     type=str)
 
@@ -21,7 +21,7 @@ def main():
     # Load OpenVLA
     print("Saving modules separately")
     print("Loading VLA")
-    model_name = args.hf_openvla
+    model_name = args.hf_name
     vla = AutoModelForVision2Seq.from_pretrained(
         model_name,
         torch_dtype=torch.bfloat16,
@@ -58,15 +58,14 @@ def main():
 
         # Get class for vision backbone using HF utils, then load
         print("Loading vision backbone...")
-        pretrained_model_name_or_path = "Embodied-CoT/ecot-openvla-7b-bridge"
         config = AutoConfig.from_pretrained(
-                        pretrained_model_name_or_path,
+                        model_name,
                         trust_remote_code=True
                     )
 
         vision_backbone_class_ref = config.auto_map[AutoModelForVision2Seq.__name__].replace("OpenVLAForActionPrediction", "PrismaticVisionBackbone")
         vision_backbone_class = get_class_from_dynamic_module(
-            vision_backbone_class_ref, pretrained_model_name_or_path
+            vision_backbone_class_ref, model_name
         )
         vision_backbone = vision_backbone_class(
                     config.use_fused_vision_backbone, config.image_sizes, config.timm_model_ids, config.timm_override_act_layers
@@ -78,7 +77,7 @@ def main():
         print("Loading projector...")
         proj_class_ref = config.auto_map[AutoModelForVision2Seq.__name__].replace("OpenVLAForActionPrediction", "PrismaticProjector")
         proj_class = get_class_from_dynamic_module(
-            proj_class_ref, pretrained_model_name_or_path
+            proj_class_ref, model_name
         )
         projector = proj_class(
             config.use_fused_vision_backbone,

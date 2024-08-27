@@ -56,7 +56,7 @@ class TRTOpenVLA:
                     self.config.timm_model_ids, self.config.timm_override_act_layers
                 )
         self.vision_backbone.load_state_dict(torch.load(os.path.join(self.save_dir, "vision_backbone.pth"), map_location=self.device))
-        self.vision_backbone.featurizer.to(self.device, torch.bfloat16)
+        self.vision_backbone.to(self.device, torch.bfloat16)
         print("Successful!")
 
         # Get class for projector using HF utils, then load

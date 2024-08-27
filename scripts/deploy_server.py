@@ -64,7 +64,7 @@ class TRTOpenVLAServer:
 
 
 def deploy(args) -> None:
-    server = TRTOpenVLAServer(args.save_dir, args.engine_dir, args.hf_name)
+    server = TRTOpenVLAServer(args.save_dir, args.engine_dir, args.hf_name, args.device)
     server.run(args.host, port=args.port)
 
 if __name__ == "__main__":
@@ -73,6 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('--engine-dir', default="./ckpts/openvla-engine", type=str)
     parser.add_argument('--hf-name', default="Embodied-CoT/ecot-openvla-7b-bridge", type=str)
     parser.add_argument('--host', default="0.0.0.0", type=str)
+    parser.add_argument('--device', default="cuda:0", type=str)
     parser.add_argument('--port', default=8000, type=int)
     args = parser.parse_args()
     deploy(args)

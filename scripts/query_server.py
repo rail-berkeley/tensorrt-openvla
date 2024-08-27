@@ -21,7 +21,10 @@ image = Image.open(BytesIO(page.content))
 print("Done!")
 
 instruction = args.instruction
-prompt = f"A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: What action should the robot take to {instruction}? ASSISTANT: TASK:"
+prompt = f"A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. USER: What action should the robot take to {instruction}? ASSISTANT:"
+
+# Below prompt is used for base OpenVLA, as downloaded from Huggingface
+# prompt = f"In: What action should the robot take to {instruction}?\nOut:"
 
 url = f"http://{args.host}:{args.port}/act"
 

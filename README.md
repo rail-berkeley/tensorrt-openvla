@@ -129,7 +129,7 @@ python scripts/query_server.py
 ```
 This will send a request to `0.0.0.0:8000/act` (likewise changeable with `--host` and `--port`) containing the image (as an `np.ndarray`) and instruction string. After running inference, it should return with a dictionary containing the action (as a 7 element `np.ndarray`) and the generated reasoning as a string. If the generated token IDs are desired instead, change `return_ids` in the sent request to `True`.
 
-### Testing Compiled Model
+### Citing TensorRT-OpenVLA
 To cite this repo, please use:
 ```
 @misc{Chen2025-tensorrt-openvla,

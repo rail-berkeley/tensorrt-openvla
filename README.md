@@ -128,3 +128,14 @@ Now, outside the Docker, you can run:
 python scripts/query_server.py
 ```
 This will send a request to `0.0.0.0:8000/act` (likewise changeable with `--host` and `--port`) containing the image (as an `np.ndarray`) and instruction string. After running inference, it should return with a dictionary containing the action (as a 7 element `np.ndarray`) and the generated reasoning as a string. If the generated token IDs are desired instead, change `return_ids` in the sent request to `True`.
+
+### Testing Compiled Model
+To cite this repo, please use:
+```
+@misc{Chen2025-tensorrt-openvla,
+      title={TensorRT-OpenVLA}, 
+      author={William Chen and Michał Zawalski and Karl Pertsch and Oier Mees and Chelsea Finn and Sergey Levine},
+      year={2025},
+      url={https://github.com/rail-berkeley/tensorrt-openvla}, 
+}
+```
